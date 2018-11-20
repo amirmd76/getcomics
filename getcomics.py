@@ -4,7 +4,7 @@ import json
 import subprocess
 import time
 import uuid
-from _sha256 import sha256
+from hashlib import sha256
 
 import requests
 from bs4 import BeautifulSoup
