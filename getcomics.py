@@ -113,7 +113,7 @@ def download_link(link):
 
     while True:
         hl = link["link"]
-        default = sha256(hl.encode())[:32]
+        default = sha256(hl.encode()).hexdigest()[:32]
         filename = DB["filenames"].get(hl, default + "." + get_ext(hl))
         name = link["name"]
         DB["filenames"][hl] = filename
@@ -133,9 +133,9 @@ def download_link(link):
             time.sleep(10)
 
 
+cur = 1
 while True:
     try:
-        cur = 1
         links = get_links(1)
         if have_seen(links):
             for i in list(range(12))[::-1]:
@@ -145,14 +145,18 @@ while True:
             cur += 1
         while True:
             links = get_links(cur)
-            for link in links:
-                download_link(link)
-                save_db()
+            if have_seen(links):
+                break
             if links is None:
+                cur = 1
                 save_db()
                 print("NOTHING TO DO!!!!")
                 time.sleep(1200)
                 break
+            for link in links:
+                download_link(link)
+                save_db()
+            cur += 1
     except Exception as e:
         print("EXCEPTION")
         print(str(e))
