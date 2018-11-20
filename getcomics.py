@@ -114,7 +114,7 @@ def download_link(link):
     while True:
         hl = link["link"]
         default = sha256(hl.encode()).hexdigest()[:32]
-        filename = DB["filenames"].get(hl, default + "." + get_ext(hl))
+        filename = default + "." + get_ext(hl)
         name = link["name"]
         DB["filenames"][hl] = filename
         link.update({"downloaded": False})
